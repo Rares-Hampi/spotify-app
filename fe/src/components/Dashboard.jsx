@@ -1,7 +1,5 @@
 import { useEffect } from "react";
 import useAuth from "./UseAuth";
-import SpotifyWebApi from "spotify-web-api-node";
-import env from "dotenv";
 import {
   CDBSidebar,
   CDBSidebarContent,
@@ -10,18 +8,16 @@ import {
   CDBSidebarMenuItem,
 } from "cdbreact";
 import { Container, NavLink } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
-const spotifyApi = new SpotifyWebApi({
-  clientId: env.CLIENT_ID,
-});
-
+let token;
 export default function Dashboard(code) {
   let accesToken = useAuth(code.code);
   useEffect(() => {
     if (!accesToken) {
       return;
     }
-    spotifyApi.setAccessToken(accesToken);
+    token = accesToken;
   }, [accesToken]);
   return (
     <div
@@ -40,15 +36,19 @@ export default function Dashboard(code) {
 
         <CDBSidebarContent className="sidebar-content">
           <CDBSidebarMenu>
-            <NavLink activeClassName="activeClicked">
-              <CDBSidebarMenuItem icon="user">
-                Find user & get data
-              </CDBSidebarMenuItem>
+            <NavLink className="activeClicked">
+              <Link to="/user" state={{ token: token }}>
+                <CDBSidebarMenuItem icon="user">
+                  Find user & get data
+                </CDBSidebarMenuItem>
+              </Link>
             </NavLink>
-            <NavLink activeClassName="activeClicked">
-              <CDBSidebarMenuItem icon="table">
-                Get recomandation
-              </CDBSidebarMenuItem>
+            <NavLink className="activeClicked">
+              <Link to="/recomandation" state={{ token: token }}>
+                <CDBSidebarMenuItem icon="table">
+                  Get recomandation
+                </CDBSidebarMenuItem>
+              </Link>
             </NavLink>
           </CDBSidebarMenu>
         </CDBSidebarContent>
