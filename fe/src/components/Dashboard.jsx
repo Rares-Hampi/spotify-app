@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import useAuth from "./UseAuth";
 import {
   CDBSidebar,
@@ -9,16 +9,34 @@ import {
 } from "cdbreact";
 import { Container, NavLink } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import SpotifyWebApi from "spotify-web-api-node";
 
-let token;
+const spotifyApi = new SpotifyWebApi({
+  clientId: "17152b371e7d4284878787a9ea97405c",
+});
+
 export default function Dashboard(code) {
+  const [token, setToken] = useState();
+  const [name, setName] = useState();
   let accesToken = useAuth(code.code);
   useEffect(() => {
     if (!accesToken) {
       return;
     }
-    token = accesToken;
+    spotifyApi.setAccessToken(accesToken);
+    setToken(accesToken);
+    spotifyApi.getMe().then(
+      (res) => {
+        setName(res.body.display_name);
+        console.log(name);
+        console.log("Some information about this user", res.body);
+      },
+      function (err) {
+        console.log("Something went wrong!", err);
+      }
+    );
   }, [accesToken]);
+  console.log(token);
   return (
     <div
       style={{ display: "flex", height: "100vh", overflow: "scroll initial" }}
@@ -37,14 +55,14 @@ export default function Dashboard(code) {
         <CDBSidebarContent className="sidebar-content">
           <CDBSidebarMenu>
             <NavLink className="activeClicked">
-              <Link to="/user" state={{ token: token }}>
+              <Link to="/user" state={token}>
                 <CDBSidebarMenuItem icon="user">
-                  Find user & get data
+                  Get top tracks and songs
                 </CDBSidebarMenuItem>
               </Link>
             </NavLink>
             <NavLink className="activeClicked">
-              <Link to="/recomandation" state={{ token: token }}>
+              <Link to="/recomandation" state={token}>
                 <CDBSidebarMenuItem icon="table">
                   Get recomandation
                 </CDBSidebarMenuItem>
@@ -55,7 +73,8 @@ export default function Dashboard(code) {
       </CDBSidebar>
 
       <Container className="container-fluid d-flex justify-content-center align-items-center">
-        <h1>Hi, you successfully logged in!</h1>
+        {console.log("plm " + `${name}`)}
+        <h1>Hi, {name} successfully logged in!</h1>
       </Container>
     </div>
   );

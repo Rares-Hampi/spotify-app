@@ -6,11 +6,13 @@ const routes = createBrowserRouter([
     path: "/",
     element: <App />,
   },
-  { path: "/user", element: <h1></h1> },
-  { path: "/recomandation", element: <h1></h1> },
+  { path: "/user", element: <User /> },
+  { path: "/recomandation", element: <Recomandation /> },
 ]);
 
 import App from "./App";
+import User from "./components/User";
+import Recomandation from "./components/Recomandation";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <RouterProvider router={routes} />
