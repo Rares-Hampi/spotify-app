@@ -1,11 +1,12 @@
-import useAuth from "./useAuth";
+import useAuth from "./UseAuth";
 
 export default function Dashboard(code) {
-  const accesToken = useAuth(code.code);
+  let accesToken = useAuth(code.code);
+  console.log(code.code);
   return (
     <div>
-      {code.code}
-      <h1>Auth code : {accesToken}</h1>
+      Cod din link:
+      {code.code}, <br /> Cod de acces: {accesToken}
     </div>
   );
 }

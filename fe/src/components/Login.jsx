@@ -7,10 +7,10 @@ export default function Login() {
       style={{ minHeight: "100vh" }}
     >
       <a
-        className="btn  btn-success btn-lg"
-        href="https://accounts.spotify.com:443/authorize?client_id=17152b371e7d4284878787a9ea97405c&response_type=code&redirect_uri=http://localhost:5173/&scope=user-read-private%20user-read-email%20user-library-modify%20user-top-read%20playlist-modify-public&state=some-state-of-my-choice"
+        className="btn btn-success btn-lg"
+        href="https://accounts.spotify.com/authorize?client_id=17152b371e7d4284878787a9ea97405c&response_type=code&redirect_uri=http://localhost:5173/&scope=user-read-private%20user-read-email%20user-library-modify%20user-top-read%20playlist-modify-public"
       >
-        Login
+        Login With Spotify
       </a>
     </Container>
   );

@@ -1,11 +1,9 @@
-import pkg from "body-parser";
-import cors from "cors";
-import express from "express";
-import SpotifyWebApi from "spotify-web-api-node";
 import "dotenv/config";
-
+import express from "express";
+import cors from "cors";
+import SpotifyWebApi from "spotify-web-api-node";
+import pkg from "body-parser";
 const { json, urlencoded } = pkg;
-
 const app = express();
 app.use(cors());
 app.use(json());
@@ -36,7 +34,6 @@ app.post("/login", (req, res) => {
 
 app.post("/refresh", (req, res) => {
   const refreshToken = req.body.refreshToken;
-  console.log("hi");
   const spotifyApi = new SpotifyWebApi({
     redirectUri: process.env.REDIRECT_URL,
     clientId: process.env.CLIENT_ID,
