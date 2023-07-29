@@ -1,10 +1,10 @@
-import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import Login from "./components/Login";
 
 function App() {
   return (
     <>
-      <h1>My spotify app</h1>
+      <Login />
     </>
   );
 }
