@@ -19,7 +19,7 @@ export default function useAuth(code) {
         console.log(err);
         window.location = "/";
       });
-  }, [accesToken, code]);
+  }, [code]);
 
   useEffect(() => {
     if (!refreshToken || !expiresIn) {
