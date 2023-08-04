@@ -36,7 +36,7 @@ export default function Dashboard(code) {
       }
     );
   }, [accesToken]);
-  console.log(token);
+
   return (
     <div
       style={{ display: "flex", height: "100vh", overflow: "scroll initial" }}
@@ -73,8 +73,7 @@ export default function Dashboard(code) {
       </CDBSidebar>
 
       <Container className="container-fluid d-flex justify-content-center align-items-center">
-        {console.log("plm " + `${name}`)}
-        <h1>Hi, {name} successfully logged in!</h1>
+        <h1>Hi {name}, you successfully logged in!</h1>
       </Container>
     </div>
   );

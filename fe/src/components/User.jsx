@@ -1,16 +1,26 @@
-import { useState, useEffect } from "react";
-import { Card, Col, Row } from "react-bootstrap";
+import { useEffect, useState } from "react";
+import {
+  CDBSidebar,
+  CDBSidebarContent,
+  CDBSidebarHeader,
+  CDBSidebarMenu,
+  CDBSidebarMenuItem,
+} from "cdbreact";
+import { Link } from "react-router-dom";
+import { Container, NavLink } from "react-bootstrap";
 import { useLocation } from "react-router-dom";
 
 import SpotifyWebApi from "spotify-web-api-node";
+import ArtistCard from "./ArtistCard";
 
 const spotifyApi = new SpotifyWebApi({
   clientId: "17152b371e7d4284878787a9ea97405c",
 });
+
 export default function User() {
   let token = useLocation();
-  const [topArtists, setTopArtists] = useState();
-  const [topTracks, setTopTracks] = useState();
+  const [topArtists, setTopArtists] = useState([]);
+  console.log(topArtists);
   useEffect(() => {
     if (!token.state) {
       return;
@@ -18,16 +28,19 @@ export default function User() {
     spotifyApi.setAccessToken(token.state);
   }, [token.state]);
 
-  useEffect(() => {
-    if (!token.state) {
-      return;
-    }
-
+  function getData() {
     spotifyApi.getMyTopArtists().then(
       (res) => {
-        let topArtist = res.body.items;
-        setTopArtists(...topArtist);
-        console.log(topArtists);
+        setTopArtists(
+          res.body.items.map((artist) => {
+            return {
+              name: artist.name,
+              image: artist.images[0],
+              id: artist.id,
+              genres: artist.genres,
+            };
+          })
+        );
       },
       function (err) {
         console.log("Something went wrong!", err);
@@ -36,32 +49,60 @@ export default function User() {
     spotifyApi.getMyTopTracks().then(
       (res) => {
         let topTrack = res.body.items;
-        setTopTracks(...topTrack);
-        console.log(topTracks);
+        console.log(topTrack);
       },
       function (err) {
         console.log("Something went wrong!", err);
       }
     );
-  }, [token]);
+  }
 
+  useEffect(() => {
+    if (!token.state) {
+      return;
+    }
+    getData();
+  }, [token.state]);
+  console.log(`( ${topArtists} )`);
   return (
-    <Row xs={1} md={2} className="g-4">
-      {Array.from({ length: 4 }).map((_, idx) => (
-        <Col key={idx}>
-          <Card>
-            <Card.Img variant="top" src="holder.js/100px160" />
-            <Card.Body>
-              <Card.Title>Card title</Card.Title>
-              <Card.Text>
-                This is a longer card with supporting text below as a natural
-                lead-in to additional content. This content is a little bit
-                longer.
-              </Card.Text>
-            </Card.Body>
-          </Card>
-        </Col>
+    <div>
+      <div
+        style={{ display: "flex", height: "100vh", overflow: "scroll initial" }}
+      >
+        <CDBSidebar textColor="#fff" backgroundColor="#333">
+          <CDBSidebarHeader prefix={<i className="fa fa-bars fa-large"></i>}>
+            <a
+              href="/"
+              className="text-decoration-none"
+              style={{ color: "inherit" }}
+            >
+              Menu
+            </a>
+          </CDBSidebarHeader>
+
+          <CDBSidebarContent className="sidebar-content">
+            <CDBSidebarMenu>
+              <NavLink className="activeClicked">
+                <Link to="/user" state={token}>
+                  <CDBSidebarMenuItem icon="user">
+                    Get top tracks and songs
+                  </CDBSidebarMenuItem>
+                </Link>
+              </NavLink>
+              <NavLink className="activeClicked">
+                <Link to="/recomandation" state={token}>
+                  <CDBSidebarMenuItem icon="table">
+                    Get recomandation
+                  </CDBSidebarMenuItem>
+                </Link>
+              </NavLink>
+            </CDBSidebarMenu>
+          </CDBSidebarContent>
+        </CDBSidebar>
+      </div>
+      {topArtists.map((artist) => (
+        <ArtistCard artist={artist} key={artist.id} />
       ))}
-    </Row>
+    </div>
   );
 }
