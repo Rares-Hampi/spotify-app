@@ -1,5 +1,9 @@
+import { useLocation } from "react-router-dom";
+
 function Recomandation() {
-  return <div>Recomandation</div>;
+  let recom = useLocation();
+  console.log(recom);
+  return <div>hwhw</div>;
 }
 
 export default Recomandation;
